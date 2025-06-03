@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinema Booking</title>
+
+  <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="nav-link" th:href="@{'/'}">
+      <i class="fas fa-film mx-1"></i> Cinema
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{'/movies'}">Filme</a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_USER')" class="nav-item">
+          <a class="nav-link" th:href="@{'/my-tickets'}">Biletele Mele</a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+          <a class="nav-link" th:href="@{'/admin/movies'}">Admin Filme</a>
+        </li>
+        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+          <a class="nav-link" th:href="@{'/admin/screenings'}">Admin Proiecții</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+        <li sec:authorize="isAnonymous()" class="nav-item">
+          <a class="nav-link" th:href="@{'/login'}">
+            <i class="fas fa-sign-in-alt"></i> Autentificare
+          </a>
+        </li>
+        <li sec:authorize="isAnonymous()" class="nav-item">
+          <a class="nav-link" th:href="@{'/register'}">
+            <i class="fas fa-user-plus"></i> Înregistrare
+          </a>
+        </li>
+        <li sec:authorize="isAuthenticated()" class="nav-item">
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link btn btn-link">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="mt-4">
+    <div class="row mt-4">
+      <div class="col-12">
+        <h2>Filme disponibile</h2>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <p th:if="${#lists.isEmpty(movies)}" class="text-muted">Momentan nu există filme disponibile.</p>
+        <div class="col" th:each="movie : ${movies}">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${movie.title}">Titlu</h5>
+              <p class="card-text" th:text="${movie.description}">Descriere</p>
+              <p class="card-text"><strong>Durata:</strong> <span th:text="${movie.duration} + ' min'">90 min</span></p>
+              <p class="card-text"><strong>Rating:</strong> <span th:text="${movie.rating}">4.5</span></p>
+              <p class="card-text"><strong>Gen:</strong> <span th:text="${movie.genre.name}">Gen</span></p>
+            </div>
+            <div class="card-footer text-center">
+              <a th:href="@{'/movies/' + ${movie.id}}" class="btn btn-primary">Detalii</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
