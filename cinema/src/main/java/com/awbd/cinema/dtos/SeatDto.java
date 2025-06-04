@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class SeatDto {
     private Long id;
-    private int row;
+    private int row_num;
     private int number;
 }

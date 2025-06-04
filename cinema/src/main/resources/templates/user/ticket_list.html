@@ -77,7 +77,7 @@
                 <td th:text="${ticket.screening.movie.title}">Titlu Film</td>
                 <td th:text="${#temporals.format(ticket.screening.startTime, 'dd.MM.yyyy HH:mm')}">Dată/Ora</td>
                 <td th:text="${ticket.screening.hall.name}">Sală</td>
-                <td th:text="${'Rând ' + ticket.seat.row + ', Loc ' + ticket.seat.number}">Loc</td>
+                <td th:text="${'Rând ' + ticket.seat.row_num + ', Loc ' + ticket.seat.number}">Loc</td>
                 <td>
                     <form method="post" th:action="@{/tickets/cancel/{id}(id=${ticket.id})}">
                         <button class="btn btn-danger btn-sm" type="submit">Anulează</button>

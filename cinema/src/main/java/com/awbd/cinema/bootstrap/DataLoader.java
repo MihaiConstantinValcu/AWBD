@@ -87,13 +87,13 @@ public class DataLoader implements CommandLineRunner {
                 for (int num = 0; num < 10; num++) {
                     Seat firstHallSeat = Seat.builder()
                             .hall(firstHall)
-                            .row(row)
+                            .row_num(row)
                             .number(num)
                             .build();
 
                     Seat secondHallSeat = Seat.builder()
                             .hall(secondHall)
-                            .row(row)
+                            .row_num(row)
                             .number(num)
                             .build();
 

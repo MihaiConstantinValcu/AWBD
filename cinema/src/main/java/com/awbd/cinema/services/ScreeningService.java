@@ -7,6 +7,7 @@ import com.awbd.cinema.domain.Ticket;
 import com.awbd.cinema.dtos.HallDto;
 import com.awbd.cinema.dtos.ScreeningDto;
 import com.awbd.cinema.dtos.SeatDto;
+import com.awbd.cinema.exceptions.ResourceNotFoundException;
 import com.awbd.cinema.repositories.HallRepository;
 import com.awbd.cinema.repositories.ScreeningRepository;
 import com.awbd.cinema.repositories.SeatRepository;
@@ -45,13 +46,16 @@ public class ScreeningService {
     public ScreeningDto findById(Long id) {
         return screeningRepository.findById(id)
                 .map(screening -> modelMapper.map(screening, ScreeningDto.class))
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Screening not found with id " + id));
     }
 
     public List<SeatDto> getAvailableSeatsForScreening(Long id) {
-        Screening screening = screeningRepository.findById(id).orElseThrow();
+        Screening screening = screeningRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Screening not found with id " + id)
+        );
 
-        Hall hall = hallRepository.findById(screening.getHall().getId()).orElseThrow();
+        Hall hall = hallRepository.findById(screening.getHall().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Hall not found with id " + id));
 
         List<Seat> allSeats = seatRepository.findAllByHallId(hall.getId());
 

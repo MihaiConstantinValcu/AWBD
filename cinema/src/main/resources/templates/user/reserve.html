@@ -66,7 +66,7 @@
                 <select class="form-select" required th:field="*{seat.id}">
                     <option disabled selected value="">-- Selectează loc --</option>
                     <option th:each="seat : ${availableSeats}"
-                            th:text="${'Rând ' + seat.row + ' - Loc ' + seat.number}"
+                            th:text="${'Rând ' + seat.row_num + ' - Loc ' + seat.number}"
                             th:value="${seat.id}">
                     </option>
                 </select>

@@ -3,6 +3,7 @@ package com.awbd.cinema.services;
 import com.awbd.cinema.domain.Movie;
 import com.awbd.cinema.dtos.GenreDto;
 import com.awbd.cinema.dtos.MovieDto;
+import com.awbd.cinema.exceptions.ResourceNotFoundException;
 import com.awbd.cinema.repositories.GenreRepository;
 import com.awbd.cinema.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class MovieService {
     public MovieDto findById(Long id) {
         return movieRepository.findById(id)
                 .map(movie -> modelMapper.map(movie, MovieDto.class))
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id " + id));
     }
 
     public List<GenreDto> findAllGenres() {
@@ -49,7 +50,7 @@ public class MovieService {
 
     public void updateMovie(Long id, Movie updatedMovie) {
         Movie movie = movieRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id " + id));
 
         movie.setTitle(updatedMovie.getTitle());
         movie.setDescription(updatedMovie.getDescription());

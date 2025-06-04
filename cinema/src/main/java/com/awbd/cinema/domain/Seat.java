@@ -14,7 +14,7 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int row;
+    private int row_num;
     private int number;
 
     @ManyToOne
