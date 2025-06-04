@@ -22,10 +22,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/product/form").hasRole("ADMIN")
                         .requestMatchers("/", "/webjars/**", "/login", "/register", "/resources/**").permitAll()
-                        .requestMatchers("/product/*").authenticated()//.hasAnyRole("ADMIN", "GUEST")
-                        .requestMatchers("/categories/*").hasAnyRole("ADMIN", "GUEST")
+                        .requestMatchers("/tickets/*", "/screenings/reserve/*", "/tickets", "/tickets/*").hasAnyRole("USER")
+                        .requestMatchers("/movie_form", "/screening-form", "/screenings/add").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)
