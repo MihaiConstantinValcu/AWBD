@@ -63,5 +63,5 @@ public class MainController {
     }
 
     @GetMapping("/access_denied")
-    public String accessDeniedPage(){ return "accessDenied"; }
+    public String accessDeniedPage(){ return "/exceptions/accessDenied"; }
 }

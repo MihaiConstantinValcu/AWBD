@@ -34,7 +34,7 @@ public class SecurityConfig {
                                 .permitAll()
                                 .loginProcessingUrl("/perform_login")
                 )
-                .exceptionHandling(ex -> ex.accessDeniedPage("/exceptions/access_denied"))
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
                 .build();
     }
 }

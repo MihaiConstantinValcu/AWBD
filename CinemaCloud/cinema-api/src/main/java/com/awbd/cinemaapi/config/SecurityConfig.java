@@ -24,7 +24,7 @@ public class SecurityConfig {
         return http
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/", "/webjars/**", "/login", "/register", "/resources/**").permitAll()
-                        .requestMatchers("/tickets/*", "/screenings/reserve/*", "/tickets", "/tickets/*").hasAnyRole("USER")
+                        .requestMatchers("/tickets/*", "/screenings/reserve/*", "/tickets", "/tickets/*", "/my-tickets").hasAnyRole("USER")
                         .requestMatchers("/movie_form", "/screening-form", "/screenings/add").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
