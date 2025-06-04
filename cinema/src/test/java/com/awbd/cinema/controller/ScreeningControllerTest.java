@@ -72,6 +72,8 @@ public class ScreeningControllerTest {
         mockMvc.perform(post("/screenings/add")
                         .param("price", "20.00")
                         .param("startTime", LocalDateTime.now().toString())
+                        .param("movie.id", "1")
+                        .param("hall.id", "1")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));

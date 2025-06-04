@@ -53,15 +53,15 @@
             <form method="post" th:action="@{/movies/update/{id}(id=${movie.id})}" th:object="${movie}">
                 <div class="mb-3">
                     <label>Titlu</label>
-                    <input class="form-control" th:field="*{title}" type="text"/>
+                    <input class="form-control" th:field="*{title}" type="text" required/>
                 </div>
                 <div class="mb-3">
                     <label>Descriere</label>
-                    <textarea class="form-control" th:field="*{description}"></textarea>
+                    <textarea class="form-control" th:field="*{description}" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label>Durată (minute)</label>
-                    <input class="form-control" th:field="*{duration}" type="number"/>
+                    <input class="form-control" th:field="*{duration}" type="number" required/>
                 </div>
                 <div class="mb-3">
                     <label th:for="rating">Rating</label>

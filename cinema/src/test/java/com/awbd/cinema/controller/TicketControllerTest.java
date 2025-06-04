@@ -41,7 +41,9 @@ public class TicketControllerTest {
     @WithMockUser(username = "user", password = "user", roles = "USER")
     public void testAddTicket() throws Exception {
         mockMvc.perform(post("/tickets")
-                        .param("id", "1") // sau alți parametri validați de Binding
+                        .param("id", "1")
+                        .param("screening.id", "1")
+                        .param("seat.id", "1")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/my-tickets"));

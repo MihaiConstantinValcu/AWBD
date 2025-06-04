@@ -2,10 +2,13 @@ package com.awbd.cinema.controllers;
 
 import com.awbd.cinema.domain.Movie;
 import com.awbd.cinema.dtos.GenreDto;
+import com.awbd.cinema.dtos.MovieDto;
 import com.awbd.cinema.services.MovieService;
 import com.awbd.cinema.services.ScreeningService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import java.util.List;
 public class MovieController {
     private final ScreeningService screeningService;
     private final MovieService movieService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/movies/{id}")
     public String showMovieDetails(@PathVariable Long id, Model model) {
@@ -29,8 +33,8 @@ public class MovieController {
     }
 
     @PostMapping("/movies/update/{id}")
-    public String updateMovie(@PathVariable Long id, @ModelAttribute("movie") Movie movie) {
-        movieService.updateMovie(id, movie);
+    public String updateMovie(@PathVariable Long id, @Valid @ModelAttribute("movie") MovieDto movie) {
+        movieService.updateMovie(id, modelMapper.map(movie, Movie.class));
 
         return "redirect:/";
     }
@@ -45,8 +49,8 @@ public class MovieController {
     }
 
     @PostMapping("/movies/add")
-    public String addMovie(@ModelAttribute("movie") Movie movie) {
-        movieService.save(movie);
+    public String addMovie(@Valid @ModelAttribute("movie") MovieDto movie) {
+        movieService.save(modelMapper.map(movie, Movie.class));
         log.info("Added movie: {}", movie.getTitle());
         return "redirect:/";
     }

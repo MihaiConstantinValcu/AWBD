@@ -7,8 +7,10 @@ import com.awbd.cinema.dtos.SeatDto;
 import com.awbd.cinema.dtos.TicketDto;
 import com.awbd.cinema.services.MovieService;
 import com.awbd.cinema.services.ScreeningService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ScreeningController {
     private final ScreeningService screeningService;
     private final MovieService movieService;
+    private final ModelMapper modelMapper;
 
     @RequestMapping("/screening-form")
     public String showScreeningForm(@RequestParam(required = false) Long movieId, Model model) {
@@ -38,8 +41,8 @@ public class ScreeningController {
     }
 
     @PostMapping("/screenings/add")
-    public String addScreening(@ModelAttribute("screening") Screening screening) {
-        screeningService.save(screening);
+    public String addScreening(@Valid @ModelAttribute("screening") ScreeningDto screening) {
+        screeningService.save(modelMapper.map(screening, Screening.class));
         log.info("Screening added: {}", screening.getStartTime().toString());
         return "redirect:/";
     }

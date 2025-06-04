@@ -3,7 +3,9 @@ package com.awbd.cinema.controllers;
 import com.awbd.cinema.domain.Ticket;
 import com.awbd.cinema.dtos.TicketDto;
 import com.awbd.cinema.services.TicketService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +20,11 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class TicketController {
     private final TicketService ticketService;
+    private final ModelMapper modelMapper;
 
     @PostMapping("/tickets")
-    public String addTicket(@ModelAttribute("ticket") Ticket ticket, Principal principal) {
-        ticketService.save(ticket, principal.getName());
+    public String addTicket(@Valid @ModelAttribute("ticket") TicketDto ticket, Principal principal) {
+        ticketService.save(modelMapper.map(ticket, Ticket.class), principal.getName());
         return "redirect:/my-tickets";
     }
 
