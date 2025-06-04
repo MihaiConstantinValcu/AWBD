@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinema Booking</title>
+
+  <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/webjars/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="nav-link" th:href="@{'/'}">
+      <i class="fas fa-film mx-1"></i> Filme
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <li sec:authorize="hasRole('ROLE_USER')" class="nav-item">
+          <a class="nav-link" th:href="@{'/my-tickets'}">Biletele Mele</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+        <li sec:authorize="isAnonymous()" class="nav-item">
+          <a class="nav-link" th:href="@{'/login'}">
+            <i class="fas fa-sign-in-alt"></i> Autentificare
+          </a>
+        </li>
+        <li sec:authorize="isAnonymous()" class="nav-item">
+          <a class="nav-link" th:href="@{'/register'}">
+            <i class="fas fa-user-plus"></i> Înregistrare
+          </a>
+        </li>
+        <li sec:authorize="isAuthenticated()" class="nav-item">
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="nav-link btn btn-link">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="mt-4">
+    <div class="row mt-4">
+      <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2>Filme disponibile</h2>
+        <a class="btn btn-success" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/movie_form'}">
+          <i class="fas fa-plus-circle"></i> Adaugă film
+        </a>
+      </div>
+
+      <div class="mt-2 mb-3">
+        <a class="btn btn-outline-primary"
+           th:href="@{/(sortBy='duration', dir=${nextDir})}">
+          Sortează după durată
+          <i class="fas" th:classappend="${dir eq 'asc'} ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+        </a>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <p class="text-muted" th:if="${#lists.isEmpty(movies.content)}">Momentan nu există filme disponibile.</p>
+        <div class="col" th:each="movie : ${movies.content}">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${movie.title}">Titlu</h5>
+              <p class="card-text" th:text="${movie.description}">Descriere</p>
+              <p class="card-text"><strong>Durata:</strong> <span th:text="${movie.duration + ' min'}">90 min</span></p>
+              <p class="card-text"><strong>Rating:</strong> <span th:text="${movie.rating}">Rating</span></p>
+              <p class="card-text"><strong>Gen:</strong> <span th:text="${movie.genre.name}">Gen</span></p>
+            </div>
+            <div class="card-footer text-center">
+              <a th:href="@{'/movies/' + ${movie.id}}" class="btn btn-primary">Detalii</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <nav>
+          <ul class="pagination mb-0">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+              <a class="page-link"
+                 th:href="@{/(page=${currentPage - 1}, sortBy=${sortBy}, dir=${dir})}">Anterior</a>
+            </li>
+
+            <li class="page-item"
+                th:classappend="${i eq currentPage} ? 'active'"
+                th:each="i : ${#numbers.sequence(0, movies.totalPages - 1)}">
+              <a class="page-link"
+                 th:href="@{/(page=${i}, sortBy=${sortBy}, dir=${dir})}"
+                 th:text="${i + 1}">1</a>
+            </li>
+
+            <li class="page-item" th:classappend="${currentPage + 1 == movies.totalPages} ? 'disabled'">
+              <a class="page-link"
+                 th:href="@{/(page=${currentPage + 1}, sortBy=${sortBy}, dir=${dir})}">Următor</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

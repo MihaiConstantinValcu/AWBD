@@ -10,9 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>discovery-service</module>
-        <module>gateway-service</module>
-        <module>auth-api</module>
+        <module>discovery-server</module>
         <module>cinema-api</module>
         <module>ticket-api</module>
         <module>screening-api</module>

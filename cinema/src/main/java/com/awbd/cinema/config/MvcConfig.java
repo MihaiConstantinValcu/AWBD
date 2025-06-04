@@ -14,7 +14,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public SimpleMappingExceptionResolver getSimpleMappingExceptionResolver() {
         SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
 
-        r.setDefaultErrorView("defaultException");
+        r.setDefaultErrorView("exceptions/defaultException");
         r.setExceptionAttribute("ex");
 
         Properties mappings = new Properties();

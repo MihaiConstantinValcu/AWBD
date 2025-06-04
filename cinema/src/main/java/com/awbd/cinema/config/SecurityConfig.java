@@ -23,7 +23,7 @@ public class SecurityConfig {
         return http
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/", "/webjars/**", "/login", "/register", "/resources/**").permitAll()
-                        .requestMatchers("/tickets/*", "/screenings/reserve/*", "/tickets", "/tickets/*").hasAnyRole("USER")
+                        .requestMatchers("/tickets/*", "/screenings/reserve/*", "/tickets", "/tickets/*", "/my-tickets").hasAnyRole("USER")
                         .requestMatchers("/movie_form", "/screening-form", "/screenings/add").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -34,7 +34,7 @@ public class SecurityConfig {
                                 .permitAll()
                                 .loginProcessingUrl("/perform_login")
                 )
-                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
+                .exceptionHandling(ex -> ex.accessDeniedPage("/exceptions/access_denied"))
                 .build();
     }
 }
