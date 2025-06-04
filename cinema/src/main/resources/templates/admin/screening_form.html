@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Adaugă Proiecție</title>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="nav-link" th:href="@{'/'}">
+            <i class="fas fa-film mx-1"></i> Filme
+        </a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
+                    <a class="nav-link" th:href="@{'/my-tickets'}">Biletele Mele</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{'/login'}">
+                        <i class="fas fa-sign-in-alt"></i> Autentificare
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{'/register'}">
+                        <i class="fas fa-user-plus"></i> Înregistrare
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="nav-link btn btn-link" type="submit">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="mt-5">
+        <h2>Adaugă Proiecție Nouă</h2>
+
+        <form method="post" th:action="@{/screenings/add}" th:object="${screening}">
+
+            <div class="mb-3">
+                <label th:for="movie">Film</label>
+                <select class="form-select" required th:field="*{movie.id}">
+                    <option disabled value="">-- Selectează film --</option>
+                    <option th:each="m : ${movies}" th:selected="${m.id == screening.movie?.id}"
+                            th:text="${m.title}"
+                            th:value="${m.id}">Film
+                    </option>
+                </select>
+            </div>
+
+
+            <!-- Sala -->
+            <div class="mb-3">
+                <label th:for="hall">Sală</label>
+                <select class="form-select" required th:field="*{hall.id}">
+                    <option disabled selected value="">Selectează sală</option>
+                    <option th:each="hall : ${halls}" th:text="${hall.name}" th:value="${hall.id}">Sală</option>
+                </select>
+            </div>
+
+            <!-- Dată și oră -->
+            <div class="mb-3">
+                <label th:for="startTime">Dată și oră proiecție</label>
+                <input class="form-control" required th:field="*{startTime}" type="datetime-local"/>
+            </div>
+
+            <!-- Preț bilet -->
+            <div class="mb-3">
+                <label th:for="price">Preț bilet (RON)</label>
+                <input class="form-control" required step="0.01" th:field="*{price}" type="number"/>
+            </div>
+
+            <!-- Acțiuni -->
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-secondary" th:href="@{/}">Renunță</a>
+                <button class="btn btn-primary" type="submit">Salvează</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

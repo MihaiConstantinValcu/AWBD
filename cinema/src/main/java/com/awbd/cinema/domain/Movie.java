@@ -1,5 +1,6 @@
 package com.awbd.cinema.domain;
 
+import com.awbd.cinema.domain.enums.Rating;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,8 @@ public class Movie {
     private String title;
     private String description;
     private int duration;
-    private double rating;
+    @Enumerated(EnumType.STRING)
+    private Rating rating;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Screening> screenings;

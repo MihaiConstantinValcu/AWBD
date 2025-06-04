@@ -1,5 +1,6 @@
 package com.awbd.cinema.dtos;
 
+import com.awbd.cinema.domain.enums.Rating;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,5 +11,6 @@ public class MovieDto {
     private String title;
     private String description;
     private int duration;
-    private double rating;
+    private Rating rating;
+    private GenreDto genre;
 }

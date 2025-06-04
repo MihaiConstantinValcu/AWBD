@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Biletele Mele</title>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/webjars/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="nav-link" th:href="@{'/'}">
+            <i class="fas fa-film mx-1"></i> Filme
+        </a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
+                    <a class="nav-link" th:href="@{'/my-tickets'}">Biletele Mele</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{'/login'}">
+                        <i class="fas fa-sign-in-alt"></i> Autentificare
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a class="nav-link" th:href="@{'/register'}">
+                        <i class="fas fa-user-plus"></i> Înregistrare
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form method="post" th:action="@{/logout}">
+                        <button class="nav-link btn btn-link" type="submit">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="mt-5">
+        <h2>Biletele Mele</h2>
+
+        <div class="d-flex justify-content-between mb-3">
+            <a class="btn btn-outline-primary"
+               th:href="@{/my-tickets(sortBy='screening.startTime', dir=${nextDir})}">
+                Sortează după dată & oră
+                <i class="fas" th:classappend="${dir eq 'asc'} ? 'fa-arrow-down' : 'fa-arrow-up'"></i>
+            </a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(tickets.content)}">
+            <p class="text-muted">Nu ai bilete rezervate momentan.</p>
+        </div>
+
+        <table class="table table-striped" th:if="${!#lists.isEmpty(tickets.content)}">
+            <thead>
+            <tr>
+                <th>Film</th>
+                <th>Dată & Oră</th>
+                <th>Sală</th>
+                <th>Loc</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ticket : ${tickets.content}">
+                <td th:text="${ticket.screening.movie.title}">Titlu Film</td>
+                <td th:text="${#temporals.format(ticket.screening.startTime, 'dd.MM.yyyy HH:mm')}">Dată/Ora</td>
+                <td th:text="${ticket.screening.hall.name}">Sală</td>
+                <td th:text="${'Rând ' + ticket.seat.row + ', Loc ' + ticket.seat.number}">Loc</td>
+                <td>
+                    <form method="post" th:action="@{/tickets/cancel/{id}(id=${ticket.id})}">
+                        <button class="btn btn-danger btn-sm" type="submit">Anulează</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end mt-3" th:if="${tickets.totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/my-tickets(page=${currentPage - 1}, sortBy=${sortBy}, dir=${dir})}">Anterior</a>
+                </li>
+
+                <li class="page-item"
+                    th:classappend="${i eq currentPage} ? 'active'"
+                    th:each="i : ${#numbers.sequence(0, tickets.totalPages - 1)}">
+                    <a class="page-link"
+                       th:href="@{/my-tickets(page=${i}, sortBy=${sortBy}, dir=${dir})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage + 1 == tickets.totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/my-tickets(page=${currentPage + 1}, sortBy=${sortBy}, dir=${dir})}">Următor</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

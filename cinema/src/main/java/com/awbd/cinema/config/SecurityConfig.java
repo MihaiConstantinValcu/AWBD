@@ -23,7 +23,7 @@ public class SecurityConfig {
         return http
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/product/form").hasRole("ADMIN")
-                        .requestMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
+                        .requestMatchers("/", "/webjars/**", "/login", "/register", "/resources/**").permitAll()
                         .requestMatchers("/product/*").authenticated()//.hasAnyRole("ADMIN", "GUEST")
                         .requestMatchers("/categories/*").hasAnyRole("ADMIN", "GUEST")
                         .anyRequest().authenticated()
