@@ -11,12 +11,14 @@ import com.awbd.cinema.repositories.SeatRepository;
 import com.awbd.cinema.repositories.security.AuthorityRepository;
 import com.awbd.cinema.repositories.security.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class DataLoader implements CommandLineRunner {
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
@@ -108,5 +110,6 @@ public class DataLoader implements CommandLineRunner {
         loadUserData();
         loadGenres();
         loadHalls();
+        log.info("Data loaded");
     }
 }

@@ -5,6 +5,7 @@ import com.awbd.cinema.dtos.GenreDto;
 import com.awbd.cinema.services.MovieService;
 import com.awbd.cinema.services.ScreeningService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MovieController {
     private final ScreeningService screeningService;
     private final MovieService movieService;
@@ -45,6 +47,7 @@ public class MovieController {
     @PostMapping("/movies/add")
     public String addMovie(@ModelAttribute("movie") Movie movie) {
         movieService.save(movie);
+        log.info("Added movie: {}", movie.getTitle());
         return "redirect:/";
     }
 }

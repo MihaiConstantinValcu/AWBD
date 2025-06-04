@@ -4,6 +4,7 @@ import com.awbd.cinema.dtos.UserDto;
 import com.awbd.cinema.services.MovieService;
 import com.awbd.cinema.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MainController {
     private final MovieService movieService;
     private final UserService userService;
@@ -50,10 +52,12 @@ public class MainController {
     public String registerUser(@ModelAttribute("user") UserDto userDto, RedirectAttributes redirectAttributes) {
         try {
             userService.register(userDto);
+            log.info("User registered successfully: {}", userDto.getUsername());
             return "redirect:/login";
         } catch (Exception e) {
             redirectAttributes.addAttribute("error", "true");
             redirectAttributes.addAttribute("message", e.getMessage());
+            log.error("Error registering user: {}", userDto.getUsername(), e);
             return "redirect:/register?error";
         }
     }
